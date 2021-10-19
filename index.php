@@ -2,6 +2,8 @@
 /*
 	TODO:
 	Transaction id?
+	
+	Multiple orders?
 		
 	Change format in enventa
 	Check payment methods in enventa
@@ -15,12 +17,14 @@ if(!file_exists($csvPath)){
 	$access_token =  getAccessToken($shopUrl, $clientId, $clientSecret);
 
 	$csv = generateCsvInformation($shopUrl, $access_token, $currentOrder);
-
-	writeCsvToFile($csvPath, $csv);
 	
-	countOrderNumberUpwards($currentOrderPath, $currentOrder);
+	if($csv !== null){
+		writeCsvToFile($csvPath, $csv);
+	
+		countOrderNumberUpwards($currentOrderPath, $currentOrder);
 
-	echo $csv;
+		echo $csv;
+	}
 }
 else{
 	echo "CSV already exists!";
@@ -72,14 +76,13 @@ function getAccessToken($shopUrl, $clientId, $clientSecret){
 *
 */
 function generateCsvInformation($shopUrl, $access_token, $currentOrder){	
-	$csv = "";
-	
 	//General order info
 	$order = getEntityFromAPI($shopUrl, $access_token, "orderNumber", $currentOrder, "/search/order");
-
 	
 	//If the order exists, start generating the csv content
-	if(isset($order["data"])){
+	if(sizeof($order["data"]) > 0){
+		$csv = "";
+		
 		$orderId = $order["included"][1]["attributes"]["orderId"];
 		$billingAddressId = $order["data"][0]["attributes"]["billingAddressId"];
 		
@@ -143,9 +146,13 @@ function generateCsvInformation($shopUrl, $access_token, $currentOrder){
 			/* Customer phone number */	$csv .= $shippingAddress["data"][0]["attributes"]["phoneNumber"];
 			/* New line */				$csv .= "\r\n";
 		}
+		
+		return $csv;
 	}
-	
-	return $csv;
+	else{
+		echo "No new orders!";
+		return null;
+	}
 }
 
 
