@@ -34,7 +34,12 @@ else{
 	
 
 /*
+* Generate an access token with clientid and client secret
 *
+* @param string shopUrl						Url to the shopware shop
+* @param string clientId					Client id generated via Settings->System->Integration
+* @param string clientSecret				Client secret generated via Settings->System->Integration
+* @return string 							The access token that can be used in future api queries
 */
 function getAccessToken($shopUrl, $clientId, $clientSecret){
 	$curl = curl_init();
@@ -73,7 +78,12 @@ function getAccessToken($shopUrl, $clientId, $clientSecret){
 
 
 /*
+* Queries different api endpoints to read all relevant order data. Then this function generates a csv-string from the data.
 *
+* @param string shopUrl						Url to the shopware shop
+* @param string access_token				Access token generated via getAccessToken()
+* @param int currentOrder					Id of the order, we want to fetch information from
+* @return string 							Order data in csv formatting
 */
 function generateCsvInformation($shopUrl, $access_token, $currentOrder){	
 	//General order info
@@ -158,7 +168,10 @@ function generateCsvInformation($shopUrl, $access_token, $currentOrder){
 
 
 /*
+* Writes the csv string generated from generateCsvInformation() to file
 *
+* @param string csvPath						Path, where the csv file should be saved
+* @param string csv							Content of the csv file
 */
 function writeCsvToFile($csvPath, $csv){
 	$fp = fopen($csvPath, 'w');
@@ -169,7 +182,9 @@ function writeCsvToFile($csvPath, $csv){
 
 
 /*
+* Generates a headline for our csv file
 *
+* @return string							Headline for the csv file
 */
 function generateHeadline(){
 	$headline = 'Bestellung; Nettowert;';
@@ -186,7 +201,10 @@ function generateHeadline(){
 
 
 /*
+* Reads the current order number from a txt file
 *
+* @param string	currentOrderPath			Path of the txt file, taht contains the current order number
+* @return string							The current order number, we want to get data for in the future
 */
 function getCurrentOrderNumber($currentOrderPath){
 	return file_get_contents($currentOrderPath);
@@ -194,8 +212,12 @@ function getCurrentOrderNumber($currentOrderPath){
 
 
 
+
 /*
+* Raises the order number by one and writes it to file
 *
+* @param string	currentOrderPath			Path of the txt file, taht contains the current order number
+* @param int currentOrder					The ordernumber, we just read data from
 */
 function countOrderNumberUpwards($currentOrderPath, $currentOrder){
 	$fp = fopen($currentOrderPath, 'w');
@@ -204,8 +226,16 @@ function countOrderNumberUpwards($currentOrderPath, $currentOrder){
 }
 
 
+
 /*
+* Queries different api endpoints to read all relevant order data. Then this function generates a csv-string from the data.
 *
+* @param string shopUrl						Url to the shopware shop
+* @param string access_token				Access token generated via getAccessToken()
+* @param int filterName						Name of the search filter we want to access
+* @param int filterValue					Value of the search filter
+* @param int endPoint						The api endpoint we want to access (starting with / )
+* @return array 							Array with data read from the api
 */
 function getEntityFromAPI($shopUrl, $access_token, $filterName, $filterValue, $endPoint){	
 	$curl = curl_init();
