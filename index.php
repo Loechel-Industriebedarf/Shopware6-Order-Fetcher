@@ -5,7 +5,7 @@
 	
 	Multiple orders?
 		
-	Change format in enventa
+	Change format in enventa (Additional address fields)
 	Check payment methods in enventa
 */
 require_once('config.php');
@@ -132,8 +132,8 @@ function generateCsvInformation($shopUrl, $access_token, $currentOrder){
 			}
 			$csv .= $billingAddress["data"][0]["attributes"]["firstName"] . " ";
 			$csv .= $billingAddress["data"][0]["attributes"]["lastName"] . ";";
-			/* Billing street */		$csv .= $billingAddress["data"][0]["attributes"]["additionalAddressLine1"] . ";";
-			/* Billing street */		$csv .= $billingAddress["data"][0]["attributes"]["additionalAddressLine2"] . ";";
+			/* Billing additional1 */		$csv .= $billingAddress["data"][0]["attributes"]["additionalAddressLine1"] . ";";
+			/* Billing additional2 */		$csv .= $billingAddress["data"][0]["attributes"]["additionalAddressLine2"] . ";";
 			/* Billing street */		$csv .= $billingAddress["data"][0]["attributes"]["street"] . ";";
 			/* Billing zip code */		$csv .= $billingAddress["data"][0]["attributes"]["zipcode"] . ";";
 			/* Billing city */			$csv .= $billingAddress["data"][0]["attributes"]["city"] . ";";
@@ -144,8 +144,8 @@ function generateCsvInformation($shopUrl, $access_token, $currentOrder){
 			}
 			$csv .= $shippingAddress["data"][0]["attributes"]["firstName"] . " ";
 			$csv .= $shippingAddress["data"][0]["attributes"]["lastName"] . ";";
-			/* Shipping street */		$csv .= $shippingAddress["data"][0]["attributes"]["additionalAddressLine1"] . ";";
-			/* Shipping street */		$csv .= $shippingAddress["data"][0]["attributes"]["additionalAddressLine2"] . ";";
+			/* Shipping additional1 */		$csv .= $shippingAddress["data"][0]["attributes"]["additionalAddressLine1"] . ";";
+			/* Shipping additional2 */		$csv .= $shippingAddress["data"][0]["attributes"]["additionalAddressLine2"] . ";";
 			/* Shipping street */		$csv .= $shippingAddress["data"][0]["attributes"]["street"] . ";";
 			/* Shipping zip code */		$csv .= $shippingAddress["data"][0]["attributes"]["zipcode"] . ";";
 			/* Shipping city */			$csv .= $shippingAddress["data"][0]["attributes"]["city"] . ";";
@@ -187,11 +187,11 @@ function writeCsvToFile($csvPath, $csv){
 * @return string							Headline for the csv file
 */
 function generateHeadline(){
-	$headline = 'Bestellung; Nettowert;';
-	$headline .= 'Artikelnr; Preis; Anzahl;';
-	$headline .= 'BillingFirma; BillingAdd1; BillingAdd2; BillingStrasse; BillingPLZ; BillingOrt; BillingLand; BillingLKZ;';
-	$headline .= 'ShippingFirma; ShippingAdd1; ShippingAdd2; ShippingStrasse; ShippingPLZ; ShippingOrt; ShippingLand; ShippingLKZ;';
-	$headline .= 'Mail; TransactionId; Phone';
+	$headline = 'Bestellung;Nettowert;';
+	$headline .= 'Artikelnr;Preis;Anzahl;Zahlungsart;Versandkosten;';
+	$headline .= 'BillingFirma;BillingAdd1;BillingAdd2;BillingStrasse;BillingPLZ;BillingOrt;BillingLand;BillingLKZ;';
+	$headline .= 'ShippingFirma;ShippingAdd1;ShippingAdd2;ShippingStrasse;ShippingPLZ;ShippingOrt;ShippingLand;ShippingLKZ;';
+	$headline .= 'Mail;TransactionId;Phone';
 	$headline .= "\r\n";
 	
 	return $headline;
